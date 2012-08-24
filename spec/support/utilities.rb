@@ -1,5 +1,5 @@
 def full_title(page_title)
-	base_title = "Model App"
+	base_title = "Desiring Talks"
 	if page_title.empty?
 		base_title
 	else

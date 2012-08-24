@@ -6,7 +6,7 @@ describe "Static Pages" do
   describe "Home page" do
     before { visit root_path }
 
-    it { should have_selector('h1', text: 'Model App') }
+    it { should have_selector('h1', text: 'Desiring Talks') }
     it { should have_selector('title', text: full_title('')) }
     it { should_not have_selector('title', text: '| Home')}
 
@@ -14,6 +14,26 @@ describe "Static Pages" do
       before { click_link "Sign up" }
 
       it { should have_selector('title', text: 'Sign up') }
+    end
+
+    describe "for signed-in users" do
+      let(:user) { Factory.create(:user) }
+      before do
+        FactoryGirl.create(:micropost, user: user, content: "xxxxxxxxx")
+        FactoryGirl.create(:micropost, user: user, content: "kadfjakfjdka")
+        sign_in user
+        visit root_path
+      end
+
+      it "should render the user's feed" do
+        user.feed.each do |item|
+          page.should have_selector("li##{item.id}", text: item.content)
+        end
+      end
+
+      describe "should have the microposts count" do
+        it { should have_selector("span", text: user.microposts.count.to_s) }
+      end
     end
   end
 
