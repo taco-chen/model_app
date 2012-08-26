@@ -1,0 +1,2 @@
+$("#microposts_count").html('<%= current_user.microposts.count %>')
+$("ol.microposts > li#<%= @micropost.id %>").fadeOut();
